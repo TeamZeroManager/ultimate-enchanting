@@ -70,7 +70,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
         graphics.fill(leftPos + 5, topPos + 5, leftPos + imageWidth - 5, topPos + 155, 0xFF34283F);
         graphics.fill(leftPos + 10, topPos + 25, leftPos + 55, topPos + 111, 0xFF211A28);
         graphics.fill(leftPos + 60, topPos + 25, leftPos + imageWidth - 8, topPos + 185, 0xFF292131);
-        graphics.fill(leftPos + 5, topPos + 158, leftPos + imageWidth - 5, topPos + imageHeight - 5, 0xFF3A303F);
+        graphics.fill(leftPos + 5, topPos + 190, leftPos + imageWidth - 5, topPos + imageHeight - 5, 0xFF3A303F);
 
         ItemStack target = menu.getSlot(0).getItem();
         ItemStack lapis = menu.getSlot(1).getItem();
