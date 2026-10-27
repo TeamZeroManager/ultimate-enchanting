@@ -3,6 +3,7 @@ package com.example.ultimateenchanting.menu;
 import com.example.ultimateenchanting.UltimateEnchanting;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,13 +14,17 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.EnchantedBookItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraftforge.common.ForgeHooks;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class UltimateEnchantingMenu extends AbstractContainerMenu {
+    public static final int APPLY_BASE = 1_000_000;
+    private static final int LEVELS_PER_ENCHANTMENT = 11;
     private final Container container;
     private final ContainerLevelAccess access;
 
@@ -33,14 +38,14 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
         this.container = container;
         this.access = access;
         container.startOpen(inventory.player);
-        addSlot(new Slot(container, 0, 26, 35));
-        addSlot(new Slot(container, 1, 26, 75) {
+        addSlot(new Slot(container, 0, 20, 45));
+        addSlot(new Slot(container, 1, 20, 85) {
             @Override public boolean mayPlace(ItemStack stack) { return stack.is(Items.LAPIS_LAZULI); }
             @Override public int getMaxStackSize() { return 64; }
         });
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++)
-            addSlot(new Slot(inventory, col + row * 9 + 9, 8 + col * 18, 120 + row * 18));
-        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 8 + col * 18, 178));
+            addSlot(new Slot(inventory, col + row * 9 + 9, 76 + col * 18, 178 + row * 18));
+        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 76 + col * 18, 236));
     }
 
     public List<Enchantment> getAvailableEnchantments() {
@@ -55,46 +60,65 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
         return list;
     }
 
-    @Override public boolean clickMenuButton(Player player, int id) {
+    private int maximumFor(Enchantment enchantment) {
+        int configuredLimit = Math.min(10, UltimateEnchanting.LEVEL_LIMIT.get());
+        if (enchantment == UltimateEnchanting.VITALITY.get()) return Math.min(5, configuredLimit);
+        return configuredLimit;
+    }
+
+    @Override
+    public boolean clickMenuButton(Player player, int id) {
+        if (id < APPLY_BASE || player.level().isClientSide) return false;
+        int packed = id - APPLY_BASE;
+        int enchantmentIndex = packed / LEVELS_PER_ENCHANTMENT;
+        int requestedLevel = packed % LEVELS_PER_ENCHANTMENT;
         List<Enchantment> available = getAvailableEnchantments();
-        if (id < 0 || id >= available.size() || player.level().isClientSide) return false;
+        if (enchantmentIndex < 0 || enchantmentIndex >= available.size() || requestedLevel <= 0) return false;
+
         ItemStack target = container.getItem(0);
         ItemStack lapis = container.getItem(1);
-        if (target.isEmpty() || lapis.isEmpty() || player.experienceLevel < 1) return false;
-        Enchantment enchantment = available.get(id);
-        int maxLevel = enchantment.getMaxLevel();
-        if (target.is(Items.BOOK)) {
-            ItemStack enchantedBook = new ItemStack(Items.ENCHANTED_BOOK);
-            boolean stackedBooks = target.getCount() > 1;
-            if (stackedBooks) {
-                target.shrink(1);
-                container.setItem(0, target);
-            } else {
-                container.setItem(0, enchantedBook);
-            }
-            EnchantedBookItem.addEnchantment(enchantedBook, new EnchantmentInstance(enchantment, maxLevel));
-            if (stackedBooks && !player.getInventory().add(enchantedBook)) player.drop(enchantedBook, false);
-        } else if (target.is(Items.ENCHANTED_BOOK)) {
-            EnchantedBookItem.addEnchantment(target, new EnchantmentInstance(enchantment, maxLevel));
-        } else {
-            target.enchant(enchantment, maxLevel);
+        if (target.isEmpty() || lapis.isEmpty()) return false;
+
+        Enchantment enchantment = available.get(enchantmentIndex);
+        int maximum = maximumFor(enchantment);
+        if (requestedLevel > maximum) {
+            player.displayClientMessage(Component.literal("El nivel máximo permitido para este encantamiento es " + maximum + "."), true);
+            return false;
         }
-        lapis.shrink(1);
-        player.giveExperienceLevels(-1);
+
+        Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.getEnchantments(target);
+        int currentLevel = currentEnchantments.getOrDefault(enchantment, 0);
+        if (requestedLevel <= currentLevel) {
+            player.displayClientMessage(Component.literal("El objeto ya tiene este nivel o uno superior."), true);
+            return false;
+        }
+
+        int xpCost = Math.max(1, requestedLevel);
+        int lapisCost = Math.max(1, (requestedLevel + 1) / 2);
+        if (player.experienceLevel < xpCost) {
+            player.displayClientMessage(Component.literal("Necesitas " + xpCost + " niveles de experiencia."), true);
+            return false;
+        }
+        if (lapis.getCount() < lapisCost) {
+            player.displayClientMessage(Component.literal("Necesitas " + lapisCost + " lapislázuli."), true);
+            return false;
+        }
+
+        currentEnchantments.put(enchantment, requestedLevel);
+        EnchantmentHelper.setEnchantments(currentEnchantments, target);
+        lapis.shrink(lapisCost);
+        player.giveExperienceLevels(-xpCost);
         container.setChanged();
         broadcastChanges();
         return true;
     }
 
-
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack empty = ItemStack.EMPTY;
         if (index < 0 || index >= slots.size()) return empty;
-
         Slot slot = slots.get(index);
         if (!slot.hasItem()) return empty;
-
         ItemStack source = slot.getItem();
         ItemStack original = source.copy();
 
@@ -110,14 +134,9 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             if (!moveItemStackTo(source, 2, 29, false)) return empty;
         }
 
-        if (source.isEmpty()) {
-            slot.set(ItemStack.EMPTY);
-        } else {
-            slot.setChanged();
-        }
-
+        if (source.isEmpty()) slot.set(ItemStack.EMPTY);
+        else slot.setChanged();
         if (source.getCount() == original.getCount()) return empty;
-
         slot.onTake(player, source);
         return original;
     }
@@ -129,8 +148,6 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
     @Override public void removed(Player player) {
         super.removed(player);
         container.stopOpen(player);
-        if (!player.level().isClientSide) {
-            clearContainer(player, container);
-        }
+        if (!player.level().isClientSide) clearContainer(player, container);
     }
 }
