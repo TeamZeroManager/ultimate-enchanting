@@ -17,7 +17,7 @@ import java.util.Map;
 public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEnchantingMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/enchanting_table.png");
     private static final int VISIBLE_ROWS = 5;
-    private static final int ROW_HEIGHT = 27;
+    private static final int ROW_HEIGHT = 29;
     private static final int LIST_X = 64;
     private static final int LIST_WIDTH = 250;
     private static final int SLIDER_X = 184;
@@ -30,8 +30,8 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
     public UltimateEnchantingScreen(UltimateEnchantingMenu menu, net.minecraft.world.entity.player.Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 320;
-        imageHeight = 276;
-        inventoryLabelY = 163;
+        imageHeight = 300;
+        inventoryLabelY = 181;
     }
 
     private String key(Enchantment enchantment) {
@@ -40,7 +40,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
     private int maxLevel(Enchantment enchantment) {
         int cap = Math.min(10, UltimateEnchanting.LEVEL_LIMIT.get());
-        if (enchantment == UltimateEnchanting.VITALITY.get()) return Math.min(5, cap);
+        if (enchantment == UltimateEnchanting.VITALITY.get()) return 5;
         return cap;
     }
 
@@ -79,7 +79,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
         List<Enchantment> enchants = menu.getAvailableEnchantments();
         int bottom = topPos + 25 + VISIBLE_ROWS * ROW_HEIGHT;
-        graphics.enableScissor(leftPos + LIST_X, topPos + 25, leftPos + LIST_X + LIST_WIDTH, Math.min(bottom, topPos + 155));
+        graphics.enableScissor(leftPos + LIST_X, topPos + 25, leftPos + LIST_X + LIST_WIDTH, Math.min(bottom, topPos + 170));
         for (int row = 0; row < VISIBLE_ROWS; row++) {
             int index = scrollOffset + row;
             if (index >= enchants.size()) break;
@@ -99,7 +99,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             String levelText = selected == 0 ? "—" : toRoman(selected);
             graphics.drawString(font, levelText, leftPos + LIST_X + 136, y + 3, 0xFFDCCBFA, false);
 
-            int sliderY = y + 17;
+            int sliderY = y + 15;
             graphics.fill(leftPos + SLIDER_X, sliderY, leftPos + SLIDER_X + SLIDER_WIDTH, sliderY + 4, 0xFF17131C);
             int max = maxLevel(enchantment);
             int fillWidth = max == 0 ? 0 : (int) Math.round((SLIDER_WIDTH - 2) * (selected / (double) max));
@@ -114,7 +114,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             int buttonColor = redundant ? 0xFF514A58 : (canPay ? 0xFF685080 : 0xFF55414B);
             graphics.fill(leftPos + APPLY_X, y + 5, leftPos + APPLY_X + 39, y + 21, buttonColor);
             graphics.drawCenteredString(font, redundant ? "OK" : "Aplicar", leftPos + APPLY_X + 19, y + 9, 0xFFFFFFFF);
-            graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 21, 0xFFC9BBD8, false);
+            graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 23, 0xFFC9BBD8, false);
         }
         graphics.disableScissor();
 
@@ -143,7 +143,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
                 Enchantment enchantment = enchants.get(index);
                 int relativeX = (int) mouseX - (leftPos + SLIDER_X);
                 int relativeY = (int) mouseY - (topPos + 27 + row * ROW_HEIGHT);
-                if (relativeY >= 12 && relativeY <= 24 && relativeX >= -2 && relativeX <= SLIDER_WIDTH + 2) {
+                if (relativeY >= 12 && relativeY <= 20 && relativeX >= -2 && relativeX <= SLIDER_WIDTH + 2) {
                     draggingIndex = index;
                     setSelectedLevel(enchantment, levelFromMouse(mouseX, enchantment));
                     return true;
@@ -185,7 +185,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (mouseX >= leftPos + LIST_X && mouseX < leftPos + LIST_X + LIST_WIDTH
-                && mouseY >= topPos + 25 && mouseY < topPos + 155) {
+                && mouseY >= topPos + 25 && mouseY < topPos + 170) {
             int max = Math.max(0, menu.getAvailableEnchantments().size() - VISIBLE_ROWS);
             scrollOffset = Math.max(0, Math.min(max, scrollOffset - (int) Math.signum(delta)));
             return true;
