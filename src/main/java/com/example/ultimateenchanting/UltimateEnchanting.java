@@ -96,7 +96,7 @@ public class UltimateEnchanting {
     }
 
     private void saveServerConfig() {
-        var config = ModLoadingContext.get().getActiveContainer().getConfig(ModConfig.Type.SERVER);
+        var config = ModLoadingContext.get().getActiveContainer().getConfigHandler().getConfig(ModConfig.Type.SERVER);
         if (config != null) config.save();
     }
 }
