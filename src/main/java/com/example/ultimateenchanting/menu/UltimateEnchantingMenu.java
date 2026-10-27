@@ -44,8 +44,8 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             @Override public int getMaxStackSize() { return 64; }
         });
         for (int row = 0; row < 3; row++) for (int col = 0; col < 9; col++)
-            addSlot(new Slot(inventory, col + row * 9 + 9, 76 + col * 18, 178 + row * 18));
-        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 76 + col * 18, 236));
+            addSlot(new Slot(inventory, col + row * 9 + 9, 76 + col * 18, 218 + row * 18));
+        for (int col = 0; col < 9; col++) addSlot(new Slot(inventory, col, 76 + col * 18, 276));
     }
 
     public List<Enchantment> getAvailableEnchantments() {
