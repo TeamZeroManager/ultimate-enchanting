@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -37,6 +38,7 @@ public class UltimateEnchanting {
             .comment("Maximum level allowed by the Ultimate Enchanting Table (1-10).")
             .defineInRange("enchantmentLevelLimit", 10, 1, 10);
     public static final ForgeConfigSpec SERVER_CONFIG = CONFIG_BUILDER.build();
+    private static ModConfig serverConfig;
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
@@ -61,6 +63,7 @@ public class UltimateEnchanting {
         BLOCK_ENTITIES.register(bus);
         MENUS.register(bus);
         ENCHANTMENTS.register(bus);
+        bus.addListener(this::onConfigLoading);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.register(new VitalityHandler());
@@ -95,8 +98,11 @@ public class UltimateEnchanting {
                         })));
     }
 
+    private void onConfigLoading(ModConfigEvent.Loading event) {
+        if (event.getConfig().getSpec() == SERVER_CONFIG) serverConfig = event.getConfig();
+    }
+
     private void saveServerConfig() {
-        var config = ModLoadingContext.get().getActiveContainer().getConfigHandler().getConfig(ModConfig.Type.SERVER);
-        if (config != null) config.save();
+        if (serverConfig != null) serverConfig.save();
     }
 }
