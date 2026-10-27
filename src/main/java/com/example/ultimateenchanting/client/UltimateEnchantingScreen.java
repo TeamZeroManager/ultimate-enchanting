@@ -17,7 +17,7 @@ import java.util.Map;
 public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEnchantingMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/gui/container/enchanting_table.png");
     private static final int VISIBLE_ROWS = 5;
-    private static final int ROW_HEIGHT = 29;
+    private static final int ROW_HEIGHT = 31;
     private static final int LIST_X = 64;
     private static final int LIST_WIDTH = 250;
     private static final int SLIDER_X = 184;
@@ -30,8 +30,8 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
     public UltimateEnchantingScreen(UltimateEnchantingMenu menu, net.minecraft.world.entity.player.Inventory inventory, Component title) {
         super(menu, inventory, title);
         imageWidth = 320;
-        imageHeight = 300;
-        inventoryLabelY = 181;
+        imageHeight = 320;
+        inventoryLabelY = 200;
     }
 
     private String key(Enchantment enchantment) {
@@ -69,7 +69,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
         graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, 0xFF211B29);
         graphics.fill(leftPos + 5, topPos + 5, leftPos + imageWidth - 5, topPos + 155, 0xFF34283F);
         graphics.fill(leftPos + 10, topPos + 25, leftPos + 55, topPos + 111, 0xFF211A28);
-        graphics.fill(leftPos + 60, topPos + 25, leftPos + imageWidth - 8, topPos + 155, 0xFF292131);
+        graphics.fill(leftPos + 60, topPos + 25, leftPos + imageWidth - 8, topPos + 185, 0xFF292131);
         graphics.fill(leftPos + 5, topPos + 158, leftPos + imageWidth - 5, topPos + imageHeight - 5, 0xFF3A303F);
 
         ItemStack target = menu.getSlot(0).getItem();
@@ -79,7 +79,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
         List<Enchantment> enchants = menu.getAvailableEnchantments();
         int bottom = topPos + 25 + VISIBLE_ROWS * ROW_HEIGHT;
-        graphics.enableScissor(leftPos + LIST_X, topPos + 25, leftPos + LIST_X + LIST_WIDTH, Math.min(bottom, topPos + 170));
+        graphics.enableScissor(leftPos + LIST_X, topPos + 25, leftPos + LIST_X + LIST_WIDTH, Math.min(bottom, topPos + 183));
         for (int row = 0; row < VISIBLE_ROWS; row++) {
             int index = scrollOffset + row;
             if (index >= enchants.size()) break;
@@ -114,14 +114,14 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             int buttonColor = redundant ? 0xFF514A58 : (canPay ? 0xFF685080 : 0xFF55414B);
             graphics.fill(leftPos + APPLY_X, y + 5, leftPos + APPLY_X + 39, y + 21, buttonColor);
             graphics.drawCenteredString(font, redundant ? "OK" : "Aplicar", leftPos + APPLY_X + 19, y + 9, 0xFFFFFFFF);
-            graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 23, 0xFFC9BBD8, false);
+            graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 22, 0xFFC9BBD8, false);
         }
         graphics.disableScissor();
 
         graphics.drawString(font, "Límite: " + toRoman(UltimateEnchanting.LEVEL_LIMIT.get()), leftPos + 12, topPos + 128, 0xFFE9D7FF, false);
         graphics.drawString(font, "Encantamientos: " + enchants.size(), leftPos + 12, topPos + 140, 0xFFCFC0DF, false);
         if (scrollOffset > 0) graphics.drawString(font, "▲", leftPos + 299, topPos + 14, 0xFFFFFFFF, false);
-        if (scrollOffset + VISIBLE_ROWS < enchants.size()) graphics.drawString(font, "▼", leftPos + 299, topPos + 151, 0xFFFFFFFF, false);
+        if (scrollOffset + VISIBLE_ROWS < enchants.size()) graphics.drawString(font, "▼", leftPos + 299, topPos + 184, 0xFFFFFFFF, false);
     }
 
     @Override
@@ -185,7 +185,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
         if (mouseX >= leftPos + LIST_X && mouseX < leftPos + LIST_X + LIST_WIDTH
-                && mouseY >= topPos + 25 && mouseY < topPos + 170) {
+                && mouseY >= topPos + 25 && mouseY < topPos + 183) {
             int max = Math.max(0, menu.getAvailableEnchantments().size() - VISIBLE_ROWS);
             scrollOffset = Math.max(0, Math.min(max, scrollOffset - (int) Math.signum(delta)));
             return true;
