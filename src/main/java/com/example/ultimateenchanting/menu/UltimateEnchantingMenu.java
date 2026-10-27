@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.enchantment.EnchantedBookItem;
+import net.minecraft.world.item.EnchantedBookItem;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -84,6 +84,42 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
         container.setChanged();
         broadcastChanges();
         return true;
+    }
+
+
+    @Override
+    public ItemStack quickMoveStack(Player player, int index) {
+        ItemStack empty = ItemStack.EMPTY;
+        if (index < 0 || index >= slots.size()) return empty;
+
+        Slot slot = slots.get(index);
+        if (!slot.hasItem()) return empty;
+
+        ItemStack source = slot.getItem();
+        ItemStack original = source.copy();
+
+        if (index < 2) {
+            if (!moveItemStackTo(source, 2, 38, true)) return empty;
+        } else if (source.is(Items.LAPIS_LAZULI)) {
+            if (!moveItemStackTo(source, 1, 2, false)) return empty;
+        } else if (container.getItem(0).isEmpty()) {
+            if (!moveItemStackTo(source, 0, 1, false)) return empty;
+        } else if (index < 29) {
+            if (!moveItemStackTo(source, 29, 38, false)) return empty;
+        } else {
+            if (!moveItemStackTo(source, 2, 29, false)) return empty;
+        }
+
+        if (source.isEmpty()) {
+            slot.set(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+
+        if (source.getCount() == original.getCount()) return empty;
+
+        slot.onTake(player, source);
+        return original;
     }
 
     @Override public boolean stillValid(Player player) {
