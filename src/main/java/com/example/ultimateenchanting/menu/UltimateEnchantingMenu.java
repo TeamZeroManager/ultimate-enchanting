@@ -62,7 +62,7 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
 
     private int maximumFor(Enchantment enchantment) {
         int configuredLimit = Math.min(10, UltimateEnchanting.LEVEL_LIMIT.get());
-        if (enchantment == UltimateEnchanting.VITALITY.get()) return Math.min(5, configuredLimit);
+        if (enchantment == UltimateEnchanting.VITALITY.get()) return 5;
         return configuredLimit;
     }
 
@@ -104,8 +104,20 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             return false;
         }
 
+        for (Map.Entry<Enchantment, Integer> existing : currentEnchantments.entrySet()) {
+            if (existing.getKey() != enchantment && (!enchantment.isCompatibleWith(existing.getKey()) || !existing.getKey().isCompatibleWith(enchantment))) {
+                player.displayClientMessage(Component.literal("Este encantamiento es incompatible con " + existing.getKey().getFullname(existing.getValue()).getString() + "."), true);
+                return false;
+            }
+        }
         currentEnchantments.put(enchantment, requestedLevel);
-        EnchantmentHelper.setEnchantments(currentEnchantments, target);
+        if (target.is(Items.BOOK)) {
+            target = new ItemStack(Items.ENCHANTED_BOOK);
+            EnchantmentHelper.setEnchantments(currentEnchantments, target);
+            container.setItem(0, target);
+        } else {
+            EnchantmentHelper.setEnchantments(currentEnchantments, target);
+        }
         lapis.shrink(lapisCost);
         player.giveExperienceLevels(-xpCost);
         container.setChanged();
