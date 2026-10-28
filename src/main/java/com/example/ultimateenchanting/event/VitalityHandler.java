@@ -25,6 +25,8 @@ public class VitalityHandler {
         int highestLevel = 0;
         for (ItemStack armorPiece : player.getArmorSlots()) {
             int level = EnchantmentHelper.getItemEnchantmentLevel(UltimateEnchanting.VITALITY.get(), armorPiece);
+            // Vitality is hard-capped at V even if another mod or command writes an invalid level.
+            level = Math.max(0, Math.min(5, level));
             highestLevel = Math.max(highestLevel, level);
         }
 
