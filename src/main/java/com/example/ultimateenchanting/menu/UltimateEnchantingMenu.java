@@ -53,8 +53,11 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
         if (stack.isEmpty()) return List.of();
         boolean book = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
         List<Enchantment> list = new ArrayList<>();
+        Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.getEnchantments(stack);
         BuiltInRegistries.ENCHANTMENT.forEach(enchantment -> {
-            if (book || enchantment.canEnchant(stack)) list.add(enchantment);
+            // Keep existing enchantments visible even if they are normally incompatible with this item,
+            // so the player can remove unwanted enchantments with the slider.
+            if (book || enchantment.canEnchant(stack) || currentEnchantments.containsKey(enchantment)) list.add(enchantment);
         });
         list.sort(Comparator.comparing(e -> BuiltInRegistries.ENCHANTMENT.getKey(e).toString()));
         return list;
@@ -73,21 +76,33 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
         int enchantmentIndex = packed / LEVELS_PER_ENCHANTMENT;
         int requestedLevel = packed % LEVELS_PER_ENCHANTMENT;
         List<Enchantment> available = getAvailableEnchantments();
-        if (enchantmentIndex < 0 || enchantmentIndex >= available.size() || requestedLevel <= 0) return false;
+        if (enchantmentIndex < 0 || enchantmentIndex >= available.size() || requestedLevel < 0) return false;
 
         ItemStack target = container.getItem(0);
         ItemStack lapis = container.getItem(1);
-        if (target.isEmpty() || lapis.isEmpty()) return false;
+        if (target.isEmpty()) return false;
 
         Enchantment enchantment = available.get(enchantmentIndex);
+        Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.getEnchantments(target);
+        int currentLevel = currentEnchantments.getOrDefault(enchantment, 0);
+
+        // Slider level 0 means remove this enchantment. Removal is free and preserves all others.
+        if (requestedLevel == 0) {
+            if (currentLevel <= 0) return false;
+            currentEnchantments.remove(enchantment);
+            EnchantmentHelper.setEnchantments(currentEnchantments, target);
+            container.setChanged();
+            broadcastChanges();
+            return true;
+        }
+
+        if (lapis.isEmpty()) return false;
         int maximum = maximumFor(enchantment);
         if (requestedLevel > maximum) {
             player.displayClientMessage(Component.literal("El nivel máximo permitido para este encantamiento es " + maximum + "."), true);
             return false;
         }
 
-        Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.getEnchantments(target);
-        int currentLevel = currentEnchantments.getOrDefault(enchantment, 0);
         if (requestedLevel <= currentLevel) {
             player.displayClientMessage(Component.literal("El objeto ya tiene este nivel o uno superior."), true);
             return false;
