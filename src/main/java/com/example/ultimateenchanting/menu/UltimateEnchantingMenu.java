@@ -104,12 +104,8 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             return false;
         }
 
-        for (Map.Entry<Enchantment, Integer> existing : currentEnchantments.entrySet()) {
-            if (existing.getKey() != enchantment && (!enchantment.isCompatibleWith(existing.getKey()) || !existing.getKey().isCompatibleWith(enchantment))) {
-                player.displayClientMessage(Component.literal("Este encantamiento es incompatible con " + existing.getKey().getFullname(existing.getValue()).getString() + "."), true);
-                return false;
-            }
-        }
+        // Ultimate Enchanting intentionally allows incompatible enchantments to coexist.
+        // Preserve all existing enchantments and add/upgrade only the selected one.
         currentEnchantments.put(enchantment, requestedLevel);
         if (target.is(Items.BOOK)) {
             target = new ItemStack(Items.ENCHANTED_BOOK);
