@@ -109,11 +109,13 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
             int xpCost = Math.max(1, selected);
             int lapisCost = Math.max(1, (selected + 1) / 2);
-            boolean redundant = selected <= current;
-            boolean canPay = !redundant && selected > 0 && menu.getSlot(1).getItem().getCount() >= lapisCost;
-            int buttonColor = redundant ? 0xFF514A58 : (canPay ? 0xFF685080 : 0xFF55414B);
+            boolean removing = selected == 0 && current > 0;
+            boolean redundant = selected > 0 && selected <= current;
+            boolean canRemove = removing;
+            boolean canPay = !redundant && selected > current && menu.getSlot(1).getItem().getCount() >= lapisCost;
+            int buttonColor = canRemove ? 0xFF8B554F : (redundant ? 0xFF514A58 : (canPay ? 0xFF685080 : 0xFF55414B));
             graphics.fill(leftPos + APPLY_X, y + 5, leftPos + APPLY_X + 39, y + 21, buttonColor);
-            graphics.drawCenteredString(font, redundant ? "OK" : "Aplicar", leftPos + APPLY_X + 19, y + 9, 0xFFFFFFFF);
+            graphics.drawCenteredString(font, removing ? "Quitar" : (redundant ? "OK" : "Aplicar"), leftPos + APPLY_X + 19, y + 9, 0xFFFFFFFF);
             graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 22, 0xFFC9BBD8, false);
         }
         graphics.disableScissor();
@@ -150,9 +152,11 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
                 }
                 if (mouseX >= leftPos + APPLY_X && mouseX < leftPos + APPLY_X + 40) {
                     int level = selectedLevel(enchantment);
-                    if (level > 0 && level > currentLevel(enchantment)) {
+                    int current = currentLevel(enchantment);
+                    if ((level == 0 && current > 0) || level > current) {
                         int action = UltimateEnchantingMenu.APPLY_BASE + index * 11 + level;
                         minecraft.gameMode.handleInventoryButtonClick(menu.containerId, action);
+                        if (level == 0) selectedLevels.remove(key(enchantment));
                     }
                     return true;
                 }
