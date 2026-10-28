@@ -86,6 +86,17 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
         graphics.fill(leftPos + 61, topPos + 25, leftPos + imageWidth - 8, topPos + 185, 0xFF19151F);
         graphics.fill(leftPos + 8, topPos + 192, leftPos + imageWidth - 8, topPos + imageHeight - 8, 0xFF27212D);
 
+        // Minecraft-style inventory slots: recessed square, dark inner fill and subtle edge.
+        // Slot coordinates must match the menu's actual Slot positions.
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 9; col++) {
+                drawInventorySlot(graphics, leftPos + 76 + col * 18, topPos + 218 + row * 18);
+            }
+        }
+        for (int col = 0; col < 9; col++) {
+            drawInventorySlot(graphics, leftPos + 76 + col * 18, topPos + 276);
+        }
+
         // Fine double-line borders and small cyan rune-like accents.
         graphics.fill(leftPos + 8, topPos + 24, leftPos + imageWidth - 8, topPos + 25, bronze);
         graphics.fill(leftPos + 59, topPos + 25, leftPos + 60, topPos + 185, bronze);
@@ -155,6 +166,14 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
         graphics.drawString(font, "MESA ARCANA", leftPos + 12, topPos + 12, 0xFFE7D7C0, false);
         if (scrollOffset > 0) graphics.drawString(font, "▲", leftPos + 299, topPos + 14, cyan, false);
         if (scrollOffset + VISIBLE_ROWS < enchants.size()) graphics.drawString(font, "▼", leftPos + 299, topPos + 181, cyan, false);
+    }
+
+    private void drawInventorySlot(GuiGraphics graphics, int x, int y) {
+        graphics.fill(x - 1, y - 1, x + 17, y + 17, 0xFF100D14);
+        graphics.fill(x, y, x + 16, y + 16, 0xFF514653);
+        graphics.fill(x + 1, y + 1, x + 15, y + 15, 0xFF28222E);
+        graphics.fill(x + 1, y + 1, x + 15, y + 2, 0xFF17131D);
+        graphics.fill(x + 1, y + 1, x + 2, y + 15, 0xFF17131D);
     }
 
     @Override
