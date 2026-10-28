@@ -106,16 +106,8 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
         graphics.fill(leftPos + 12, topPos + 11, leftPos + 14, topPos + 17, cyan);
         graphics.fill(leftPos + imageWidth - 14, topPos + 11, leftPos + imageWidth - 12, topPos + 17, cyan);
 
-        // Item and lapis wells.
-        graphics.fill(leftPos + 15, topPos + 39, leftPos + 51, topPos + 75, 0xFF18141D);
-        graphics.fill(leftPos + 15, topPos + 79, leftPos + 51, topPos + 115, 0xFF18141D);
-        graphics.fill(leftPos + 16, topPos + 40, leftPos + 50, topPos + 41, bronze);
-        graphics.fill(leftPos + 16, topPos + 80, leftPos + 50, topPos + 81, bronze);
-        ItemStack target = menu.getSlot(0).getItem();
-        ItemStack lapis = menu.getSlot(1).getItem();
-        graphics.renderItem(target, leftPos + 24, topPos + 48);
-        graphics.renderItem(lapis, leftPos + 24, topPos + 88);
-
+        // The menu already renders the real equipment and lapis slots. Do not paint or draw them here:
+        // doing so stacks a second frame and duplicates the item icons.
         List<Enchantment> enchants = menu.getAvailableEnchantments();
         int bottom = topPos + 25 + VISIBLE_ROWS * ROW_HEIGHT;
         graphics.enableScissor(leftPos + LIST_X, topPos + 25, leftPos + LIST_X + LIST_WIDTH, Math.min(bottom, topPos + 183));
@@ -135,8 +127,21 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
             Component name = enchantment.getFullname(Math.max(1, Math.min(selected == 0 ? 1 : selected, maxLevel(enchantment))));
             String label = name.getString();
-            if (label.length() > 18) label = label.substring(0, 17) + "…";
-            graphics.drawString(font, label, leftPos + LIST_X + 7, y + 3, 0xFFF4EAF8, false);
+            int nameX = leftPos + LIST_X + 7;
+            int nameY = y + 3;
+            int nameWidth = 124;
+            int textWidth = font.width(label);
+            graphics.enableScissor(nameX, y + 1, nameX + nameWidth, y + 14);
+            if (textWidth <= nameWidth) {
+                graphics.drawString(font, label, nameX, nameY, 0xFFF4EAF8, false);
+            } else {
+                // Marquee: pause at each end, then glide so long localized/modded names remain readable.
+                long phase = (System.currentTimeMillis() / 35L) % (long) (textWidth - nameWidth + 48);
+                int offset = phase < 24 ? 0
+                        : (int) Math.min(textWidth - nameWidth, phase - 24);
+                graphics.drawString(font, label, nameX - offset, nameY, 0xFFF4EAF8, false);
+            }
+            graphics.disableScissor();
             String levelText = selected == 0 ? "—" : toRoman(selected);
             graphics.drawString(font, levelText, leftPos + LIST_X + 136, y + 3, selected == 0 ? 0xFFB68D86 : 0xFFE5D0FF, false);
 
