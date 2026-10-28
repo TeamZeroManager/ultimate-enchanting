@@ -168,7 +168,7 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
         graphics.drawString(font, "Límite " + toRoman(UltimateEnchanting.LEVEL_LIMIT.get()), leftPos + 13, topPos + 132, 0xFFE4D3F3, false);
         graphics.drawString(font, "Lista " + enchants.size(), leftPos + 13, topPos + 145, 0xFFBEB0C9, false);
-        graphics.drawString(font, "MESA ARCANA", leftPos + 12, topPos + 12, 0xFFE7D7C0, false);
+        graphics.drawCenteredString(font, "MESA ARCANA", leftPos + imageWidth / 2, topPos + 11, 0xFFE7D7C0);
         if (scrollOffset > 0) graphics.drawString(font, "▲", leftPos + 299, topPos + 14, cyan, false);
         if (scrollOffset + VISIBLE_ROWS < enchants.size()) graphics.drawString(font, "▼", leftPos + 299, topPos + 181, cyan, false);
     }
