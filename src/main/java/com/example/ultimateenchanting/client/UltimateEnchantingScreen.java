@@ -85,6 +85,14 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
         graphics.fill(leftPos + 10, topPos + 25, leftPos + 58, topPos + 185, panelInset);
         graphics.fill(leftPos + 61, topPos + 25, leftPos + imageWidth - 8, topPos + 185, 0xFF19151F);
         graphics.fill(leftPos + 8, topPos + 192, leftPos + imageWidth - 8, topPos + imageHeight - 8, 0xFF27212D);
+        // Header ornament and double-line frame inspired by the reference concept.
+        graphics.fill(leftPos + 22, topPos + 18, leftPos + 125, topPos + 19, 0xFF55402F);
+        graphics.fill(leftPos + 195, topPos + 18, leftPos + 298, topPos + 19, 0xFF55402F);
+        graphics.fill(leftPos + 17, topPos + 16, leftPos + 20, topPos + 20, 0xFF70C9D0);
+        graphics.fill(leftPos + imageWidth - 20, topPos + 16, leftPos + imageWidth - 17, topPos + 20, 0xFF70C9D0);
+        // Fine inset edge around the inventory panel.
+        graphics.fill(leftPos + 10, topPos + 195, leftPos + imageWidth - 10, topPos + 196, 0xFF786044);
+        graphics.fill(leftPos + 10, topPos + imageHeight - 11, leftPos + imageWidth - 10, topPos + imageHeight - 10, 0xFF786044);
 
         // Minecraft-style inventory slots: recessed square, dark inner fill and subtle edge.
         // Slot coordinates must match the menu's actual Slot positions.
@@ -120,10 +128,15 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             int current = currentLevel(enchantment);
             boolean hovered = mouseX >= leftPos + LIST_X && mouseX < leftPos + LIST_X + LIST_WIDTH
                     && mouseY >= y && mouseY < y + ROW_HEIGHT - 2;
-            graphics.fill(leftPos + LIST_X, y, leftPos + LIST_X + LIST_WIDTH, y + ROW_HEIGHT - 2,
+            graphics.fill(leftPos + LIST_X, y, leftPos + LIST_X + LIST_WIDTH, y + ROW_HEIGHT - 2, 0xFF100D14);
+            graphics.fill(leftPos + LIST_X + 1, y + 1, leftPos + LIST_X + LIST_WIDTH - 1, y + ROW_HEIGHT - 3,
                     hovered ? 0xFF514353 : 0xFF302735);
-            graphics.fill(leftPos + LIST_X, y, leftPos + LIST_X + 2, y + ROW_HEIGHT - 2, hovered ? cyan : bronze);
-            if (current > 0) graphics.fill(leftPos + LIST_X + 4, y + 3, leftPos + LIST_X + 5, y + 10, 0xFF78B88A);
+            graphics.fill(leftPos + LIST_X + 1, y + 1, leftPos + LIST_X + 3, y + ROW_HEIGHT - 3, hovered ? cyan : bronze);
+            graphics.fill(leftPos + LIST_X + 5, y + ROW_HEIGHT - 4, leftPos + LIST_X + LIST_WIDTH - 4, y + ROW_HEIGHT - 3, 0xFF493747);
+            if (current > 0) {
+                graphics.fill(leftPos + LIST_X + 5, y + 3, leftPos + LIST_X + 6, y + 11, 0xFF78B88A);
+                graphics.fill(leftPos + LIST_X + 5, y + 3, leftPos + LIST_X + 10, y + 4, 0xFF78B88A);
+            }
 
             Component name = enchantment.getFullname(Math.max(1, Math.min(selected == 0 ? 1 : selected, maxLevel(enchantment))));
             String label = name.getString();
