@@ -66,16 +66,44 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
-        graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, 0xFF211B29);
-        graphics.fill(leftPos + 5, topPos + 5, leftPos + imageWidth - 5, topPos + 155, 0xFF34283F);
-        graphics.fill(leftPos + 10, topPos + 25, leftPos + 55, topPos + 111, 0xFF211A28);
-        graphics.fill(leftPos + 60, topPos + 25, leftPos + imageWidth - 8, topPos + 185, 0xFF292131);
-        graphics.fill(leftPos + 5, topPos + 190, leftPos + imageWidth - 5, topPos + imageHeight - 5, 0xFF3A303F);
+        // Visual-only pass: the enchantment and compatibility logic lives in the menu and is unchanged.
+        final int frame = 0xFF17131D;
+        final int bronze = 0xFF786044;
+        final int bronzeLight = 0xFFB18A59;
+        final int stone = 0xFF29232F;
+        final int panel = 0xFF211C28;
+        final int panelInset = 0xFF302738;
+        final int cyan = 0xFF70C9D0;
 
+        graphics.fill(leftPos, topPos, leftPos + imageWidth, topPos + imageHeight, frame);
+        // Outer frame and restrained bronze edging.
+        graphics.fill(leftPos + 1, topPos + 1, leftPos + imageWidth - 1, topPos + imageHeight - 1, bronze);
+        graphics.fill(leftPos + 3, topPos + 3, leftPos + imageWidth - 3, topPos + imageHeight - 3, stone);
+        graphics.fill(leftPos + 5, topPos + 5, leftPos + imageWidth - 5, topPos + 188, panel);
+        graphics.fill(leftPos + 5, topPos + 190, leftPos + imageWidth - 5, topPos + imageHeight - 5, panel);
+        graphics.fill(leftPos + 7, topPos + 7, leftPos + imageWidth - 7, topPos + 23, 0xFF17131D);
+        graphics.fill(leftPos + 10, topPos + 25, leftPos + 58, topPos + 185, panelInset);
+        graphics.fill(leftPos + 61, topPos + 25, leftPos + imageWidth - 8, topPos + 185, 0xFF19151F);
+        graphics.fill(leftPos + 8, topPos + 192, leftPos + imageWidth - 8, topPos + imageHeight - 8, 0xFF27212D);
+
+        // Fine double-line borders and small cyan rune-like accents.
+        graphics.fill(leftPos + 8, topPos + 24, leftPos + imageWidth - 8, topPos + 25, bronze);
+        graphics.fill(leftPos + 59, topPos + 25, leftPos + 60, topPos + 185, bronze);
+        graphics.fill(leftPos + 8, topPos + 188, leftPos + imageWidth - 8, topPos + 189, bronze);
+        graphics.fill(leftPos + 10, topPos + 8, leftPos + 26, topPos + 9, bronzeLight);
+        graphics.fill(leftPos + imageWidth - 26, topPos + 8, leftPos + imageWidth - 10, topPos + 9, bronzeLight);
+        graphics.fill(leftPos + 12, topPos + 11, leftPos + 14, topPos + 17, cyan);
+        graphics.fill(leftPos + imageWidth - 14, topPos + 11, leftPos + imageWidth - 12, topPos + 17, cyan);
+
+        // Item and lapis wells.
+        graphics.fill(leftPos + 15, topPos + 39, leftPos + 51, topPos + 75, 0xFF18141D);
+        graphics.fill(leftPos + 15, topPos + 79, leftPos + 51, topPos + 115, 0xFF18141D);
+        graphics.fill(leftPos + 16, topPos + 40, leftPos + 50, topPos + 41, bronze);
+        graphics.fill(leftPos + 16, topPos + 80, leftPos + 50, topPos + 81, bronze);
         ItemStack target = menu.getSlot(0).getItem();
         ItemStack lapis = menu.getSlot(1).getItem();
-        graphics.renderItem(target, leftPos + 24, topPos + 42);
-        graphics.renderItem(lapis, leftPos + 24, topPos + 82);
+        graphics.renderItem(target, leftPos + 24, topPos + 48);
+        graphics.renderItem(lapis, leftPos + 24, topPos + 88);
 
         List<Enchantment> enchants = menu.getAvailableEnchantments();
         int bottom = topPos + 25 + VISIBLE_ROWS * ROW_HEIGHT;
@@ -90,48 +118,51 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             boolean hovered = mouseX >= leftPos + LIST_X && mouseX < leftPos + LIST_X + LIST_WIDTH
                     && mouseY >= y && mouseY < y + ROW_HEIGHT - 2;
             graphics.fill(leftPos + LIST_X, y, leftPos + LIST_X + LIST_WIDTH, y + ROW_HEIGHT - 2,
-                    hovered ? 0xFF554465 : 0xFF40344D);
+                    hovered ? 0xFF514353 : 0xFF302735);
+            graphics.fill(leftPos + LIST_X, y, leftPos + LIST_X + 2, y + ROW_HEIGHT - 2, hovered ? cyan : bronze);
+            if (current > 0) graphics.fill(leftPos + LIST_X + 4, y + 3, leftPos + LIST_X + 5, y + 10, 0xFF78B88A);
 
             Component name = enchantment.getFullname(Math.max(1, Math.min(selected == 0 ? 1 : selected, maxLevel(enchantment))));
             String label = name.getString();
             if (label.length() > 18) label = label.substring(0, 17) + "…";
-            graphics.drawString(font, label, leftPos + LIST_X + 5, y + 3, 0xFFF7F0FF, false);
+            graphics.drawString(font, label, leftPos + LIST_X + 7, y + 3, 0xFFF4EAF8, false);
             String levelText = selected == 0 ? "—" : toRoman(selected);
-            graphics.drawString(font, levelText, leftPos + LIST_X + 136, y + 3, 0xFFDCCBFA, false);
+            graphics.drawString(font, levelText, leftPos + LIST_X + 136, y + 3, selected == 0 ? 0xFFB68D86 : 0xFFE5D0FF, false);
 
             int sliderY = y + 15;
-            graphics.fill(leftPos + SLIDER_X, sliderY, leftPos + SLIDER_X + SLIDER_WIDTH, sliderY + 4, 0xFF17131C);
+            graphics.fill(leftPos + SLIDER_X, sliderY, leftPos + SLIDER_X + SLIDER_WIDTH, sliderY + 4, 0xFF100D14);
             int max = maxLevel(enchantment);
             int fillWidth = max == 0 ? 0 : (int) Math.round((SLIDER_WIDTH - 2) * (selected / (double) max));
-            graphics.fill(leftPos + SLIDER_X + 1, sliderY + 1, leftPos + SLIDER_X + 1 + fillWidth, sliderY + 3, 0xFFB89AE8);
+            if (fillWidth > 0) graphics.fill(leftPos + SLIDER_X + 1, sliderY + 1, leftPos + SLIDER_X + 1 + fillWidth, sliderY + 3, selected == 0 ? 0xFF98645F : 0xFF64BFC7);
             int knobX = leftPos + SLIDER_X + 1 + fillWidth;
-            graphics.fill(knobX - 2, sliderY - 2, knobX + 2, sliderY + 6, 0xFFE9D9FF);
+            graphics.fill(knobX - 2, sliderY - 2, knobX + 2, sliderY + 6, 0xFFD8C7A5);
 
             int xpCost = Math.max(1, selected);
             int lapisCost = Math.max(1, (selected + 1) / 2);
             boolean removing = selected == 0 && current > 0;
             boolean redundant = selected > 0 && selected <= current;
-            boolean canRemove = removing;
             boolean canPay = !redundant && selected > current && menu.getSlot(1).getItem().getCount() >= lapisCost;
-            int buttonColor = canRemove ? 0xFF8B554F : (redundant ? 0xFF514A58 : (canPay ? 0xFF685080 : 0xFF55414B));
-            graphics.fill(leftPos + APPLY_X, y + 5, leftPos + APPLY_X + 39, y + 21, buttonColor);
-            graphics.drawCenteredString(font, removing ? "Quitar" : (redundant ? "OK" : "Aplicar"), leftPos + APPLY_X + 19, y + 9, 0xFFFFFFFF);
-            graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 22, 0xFFC9BBD8, false);
+            int buttonColor = removing ? 0xFF754842 : (redundant ? 0xFF45404B : (canPay ? 0xFF496A69 : 0xFF51414C));
+            graphics.fill(leftPos + APPLY_X, y + 5, leftPos + APPLY_X + 39, y + 21, 0xFF151119);
+            graphics.fill(leftPos + APPLY_X + 1, y + 6, leftPos + APPLY_X + 38, y + 20, buttonColor);
+            graphics.drawCenteredString(font, removing ? "Quitar" : (redundant ? "Actual" : "Aplicar"), leftPos + APPLY_X + 19, y + 9, 0xFFFFFFFF);
+            graphics.drawString(font, "XP " + xpCost + " · L " + lapisCost, leftPos + SLIDER_X, y + 22, 0xFFC7B8D0, false);
         }
         graphics.disableScissor();
 
-        graphics.drawString(font, "Límite: " + toRoman(UltimateEnchanting.LEVEL_LIMIT.get()), leftPos + 12, topPos + 128, 0xFFE9D7FF, false);
-        graphics.drawString(font, "Encantamientos: " + enchants.size(), leftPos + 12, topPos + 140, 0xFFCFC0DF, false);
-        if (scrollOffset > 0) graphics.drawString(font, "▲", leftPos + 299, topPos + 14, 0xFFFFFFFF, false);
-        if (scrollOffset + VISIBLE_ROWS < enchants.size()) graphics.drawString(font, "▼", leftPos + 299, topPos + 184, 0xFFFFFFFF, false);
+        graphics.drawString(font, "Límite " + toRoman(UltimateEnchanting.LEVEL_LIMIT.get()), leftPos + 13, topPos + 132, 0xFFE4D3F3, false);
+        graphics.drawString(font, "Lista " + enchants.size(), leftPos + 13, topPos + 145, 0xFFBEB0C9, false);
+        graphics.drawString(font, "MESA ARCANA", leftPos + 12, topPos + 12, 0xFFE7D7C0, false);
+        if (scrollOffset > 0) graphics.drawString(font, "▲", leftPos + 299, topPos + 14, cyan, false);
+        if (scrollOffset + VISIBLE_ROWS < enchants.size()) graphics.drawString(font, "▼", leftPos + 299, topPos + 181, cyan, false);
     }
 
     @Override
     protected void renderLabels(GuiGraphics graphics, int mouseX, int mouseY) {
-        graphics.drawString(font, "Ultimate Enchanting", 10, 10, 0xFFFFFFFF, false);
-        graphics.drawString(font, "Objeto", 14, 29, 0xFFDCCBEA, false);
-        graphics.drawString(font, "Lapislázuli", 10, 70, 0xFFDCCBEA, false);
-        graphics.drawString(font, "Inventario", 8, inventoryLabelY, 0xFFFFFFFF, false);
+        graphics.drawString(font, "Objeto", 14, 29, 0xFFE3D0AD, false);
+        graphics.drawString(font, "Lapislázuli", 10, 70, 0xFFE3D0AD, false);
+        graphics.drawString(font, "Inventario", 8, inventoryLabelY, 0xFFE3D0AD, false);
+        graphics.fill(8, inventoryLabelY - 4, 312, inventoryLabelY - 3, 0xFF786044);
     }
 
     @Override
