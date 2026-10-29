@@ -1,5 +1,10 @@
 {
   "block.ultimate_enchanting.ultimate_enchanting_table": "Ultimate Enchanting Table",
   "item.ultimate_enchanting.ultimate_enchanting_table": "Ultimate Enchanting Table",
-  "enchantment.ultimate_enchanting.vitality": "Vitality"
+  "enchantment.ultimate_enchanting.vitality": "Vitality",
+  "item.ultimate_enchanting.matadioses_7": "Godslayer — I",
+  "item.ultimate_enchanting.matadioses_10": "Godslayer — II",
+  "item.ultimate_enchanting.matadioses_13": "Godslayer — III",
+  "item.ultimate_enchanting.matadioses_16": "Godslayer — IV",
+  "item.ultimate_enchanting.matadioses_20": "Godslayer — V"
 }
