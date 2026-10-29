@@ -2,9 +2,14 @@
   "block.ultimate_enchanting.ultimate_enchanting_table": "Ultimate Enchanting Table",
   "item.ultimate_enchanting.ultimate_enchanting_table": "Ultimate Enchanting Table",
   "enchantment.ultimate_enchanting.vitality": "Vitality",
-  "item.ultimate_enchanting.matadioses_7": "Godslayer — I",
-  "item.ultimate_enchanting.matadioses_10": "Godslayer — II",
-  "item.ultimate_enchanting.matadioses_13": "Godslayer — III",
-  "item.ultimate_enchanting.matadioses_16": "Godslayer — IV",
-  "item.ultimate_enchanting.matadioses_20": "Godslayer — V"
+  "item.ultimate_enchanting.matadioses_7": "The One That Awoke",
+  "item.ultimate_enchanting.matadioses_10": "The One That Swore",
+  "item.ultimate_enchanting.matadioses_13": "The One That Fell",
+  "item.ultimate_enchanting.matadioses_16": "The One That Endured",
+  "item.ultimate_enchanting.matadioses_20": "The One That Remembered",
+  "item.ultimate_enchanting.matadioses_7.lore": "A single rune glows on the blade. It is the first fragment of a name the world forgot.",
+  "item.ultimate_enchanting.matadioses_10.lore": "Two runes preserve an ancient oath. The second inscription seems to answer the first.",
+  "item.ultimate_enchanting.matadioses_13.lore": "Three runes were carved after a battle erased from history. One bears a mark as if torn from the metal.",
+  "item.ultimate_enchanting.matadioses_16.lore": "Four runes survived centuries of war. No wielder understood the inscription was incomplete.",
+  "item.ultimate_enchanting.matadioses_20.lore": "Five runes almost complete the true name. Something no blade can hold is still missing: what unites them."
 }

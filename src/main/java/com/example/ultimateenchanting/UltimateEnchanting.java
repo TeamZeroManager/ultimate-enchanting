@@ -54,17 +54,16 @@ public class UltimateEnchanting {
     public static final RegistryObject<Item> ENCHANTING_TABLE_ITEM = ITEMS.register("ultimate_enchanting_table",
             () -> new BlockItem(ENCHANTING_TABLE.get(), new Item.Properties()));
 
-    // Five Matadioses variants cover the agreed 7-20 base-damage range.
     public static final RegistryObject<Item> MATADIOSES_7 = ITEMS.register("matadioses_7",
-            () -> new MatadiosesSwordItem(7, new Item.Properties().fireResistant()));
+            () -> new MatadiosesSwordItem(7, "item.ultimate_enchanting.matadioses_7.lore", new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> MATADIOSES_10 = ITEMS.register("matadioses_10",
-            () -> new MatadiosesSwordItem(10, new Item.Properties().fireResistant()));
+            () -> new MatadiosesSwordItem(10, "item.ultimate_enchanting.matadioses_10.lore", new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> MATADIOSES_13 = ITEMS.register("matadioses_13",
-            () -> new MatadiosesSwordItem(13, new Item.Properties().fireResistant()));
+            () -> new MatadiosesSwordItem(13, "item.ultimate_enchanting.matadioses_13.lore", new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> MATADIOSES_16 = ITEMS.register("matadioses_16",
-            () -> new MatadiosesSwordItem(16, new Item.Properties().fireResistant()));
+            () -> new MatadiosesSwordItem(16, "item.ultimate_enchanting.matadioses_16.lore", new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> MATADIOSES_20 = ITEMS.register("matadioses_20",
-            () -> new MatadiosesSwordItem(20, new Item.Properties().fireResistant()));
+            () -> new MatadiosesSwordItem(20, "item.ultimate_enchanting.matadioses_20.lore", new Item.Properties().fireResistant()));
     public static final List<RegistryObject<Item>> MATADIOSES_ITEMS = List.of(
             MATADIOSES_7, MATADIOSES_10, MATADIOSES_13, MATADIOSES_16, MATADIOSES_20);
 

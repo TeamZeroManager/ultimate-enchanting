@@ -2,9 +2,14 @@
   "block.ultimate_enchanting.ultimate_enchanting_table": "Mesa de encantamientos definitiva",
   "item.ultimate_enchanting.ultimate_enchanting_table": "Mesa de encantamientos definitiva",
   "enchantment.ultimate_enchanting.vitality": "Vitalidad",
-  "item.ultimate_enchanting.matadioses_7": "Matadioses — I",
-  "item.ultimate_enchanting.matadioses_10": "Matadioses — II",
-  "item.ultimate_enchanting.matadioses_13": "Matadioses — III",
-  "item.ultimate_enchanting.matadioses_16": "Matadioses — IV",
-  "item.ultimate_enchanting.matadioses_20": "Matadioses — V"
+  "item.ultimate_enchanting.matadioses_7": "La que Despertó",
+  "item.ultimate_enchanting.matadioses_10": "La que Juró",
+  "item.ultimate_enchanting.matadioses_13": "La que Cayó",
+  "item.ultimate_enchanting.matadioses_16": "La que Permaneció",
+  "item.ultimate_enchanting.matadioses_20": "La que Recordó",
+  "item.ultimate_enchanting.matadioses_7.lore": "Una sola runa brilla en la hoja. Es el primer fragmento de un nombre que el mundo olvidó.",
+  "item.ultimate_enchanting.matadioses_10.lore": "Dos runas guardan un juramento antiguo. La segunda inscripción parece responder a la primera.",
+  "item.ultimate_enchanting.matadioses_13.lore": "Tres runas fueron grabadas tras una batalla borrada de la historia. Una de ellas está marcada como si hubiera sido arrancada del metal.",
+  "item.ultimate_enchanting.matadioses_16.lore": "Cuatro runas sobrevivieron a siglos de guerras. Ningún portador comprendió que la inscripción estaba incompleta.",
+  "item.ultimate_enchanting.matadioses_20.lore": "Cinco runas casi completan el nombre verdadero. Falta algo que no puede encontrarse en ninguna hoja: aquello que las une."
 }
