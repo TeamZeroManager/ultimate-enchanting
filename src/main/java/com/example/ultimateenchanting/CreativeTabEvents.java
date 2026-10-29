@@ -13,5 +13,8 @@ public final class CreativeTabEvents {
         if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(UltimateEnchanting.ENCHANTING_TABLE_ITEM.get());
         }
+        if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+            UltimateEnchanting.MATADIOSES_ITEMS.forEach(item -> event.accept(item.get()));
+        }
     }
 }
