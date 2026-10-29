@@ -1,5 +1,10 @@
 {
   "block.ultimate_enchanting.ultimate_enchanting_table": "Mesa de encantamientos definitiva",
   "item.ultimate_enchanting.ultimate_enchanting_table": "Mesa de encantamientos definitiva",
-  "enchantment.ultimate_enchanting.vitality": "Vitalidad"
+  "enchantment.ultimate_enchanting.vitality": "Vitalidad",
+  "item.ultimate_enchanting.matadioses_7": "Matadioses — I",
+  "item.ultimate_enchanting.matadioses_10": "Matadioses — II",
+  "item.ultimate_enchanting.matadioses_13": "Matadioses — III",
+  "item.ultimate_enchanting.matadioses_16": "Matadioses — IV",
+  "item.ultimate_enchanting.matadioses_20": "Matadioses — V"
 }
