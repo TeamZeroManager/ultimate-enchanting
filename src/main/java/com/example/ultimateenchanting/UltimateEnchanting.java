@@ -4,6 +4,8 @@ import com.example.ultimateenchanting.block.UltimateEnchantingTableBlock;
 import com.example.ultimateenchanting.blockentity.UltimateEnchantingTableBlockEntity;
 import com.example.ultimateenchanting.enchantment.VitalityEnchantment;
 import com.example.ultimateenchanting.event.VitalityHandler;
+import com.example.ultimateenchanting.event.MatadiosesHandler;
+import com.example.ultimateenchanting.item.MatadiosesSwordItem;
 import com.example.ultimateenchanting.menu.UltimateEnchantingMenu;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.Commands;
@@ -28,6 +30,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import java.util.List;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 
 @Mod(UltimateEnchanting.MODID)
@@ -50,6 +53,21 @@ public class UltimateEnchanting {
             () -> new UltimateEnchantingTableBlock(BlockBehaviour.Properties.copy(Blocks.ENCHANTING_TABLE).noOcclusion()));
     public static final RegistryObject<Item> ENCHANTING_TABLE_ITEM = ITEMS.register("ultimate_enchanting_table",
             () -> new BlockItem(ENCHANTING_TABLE.get(), new Item.Properties()));
+
+    // Five Matadioses variants cover the agreed 7-20 base-damage range.
+    public static final RegistryObject<Item> MATADIOSES_7 = ITEMS.register("matadioses_7",
+            () -> new MatadiosesSwordItem(7, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> MATADIOSES_10 = ITEMS.register("matadioses_10",
+            () -> new MatadiosesSwordItem(10, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> MATADIOSES_13 = ITEMS.register("matadioses_13",
+            () -> new MatadiosesSwordItem(13, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> MATADIOSES_16 = ITEMS.register("matadioses_16",
+            () -> new MatadiosesSwordItem(16, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> MATADIOSES_20 = ITEMS.register("matadioses_20",
+            () -> new MatadiosesSwordItem(20, new Item.Properties().fireResistant()));
+    public static final List<RegistryObject<Item>> MATADIOSES_ITEMS = List.of(
+            MATADIOSES_7, MATADIOSES_10, MATADIOSES_13, MATADIOSES_16, MATADIOSES_20);
+
     public static final RegistryObject<BlockEntityType<UltimateEnchantingTableBlockEntity>> ENCHANTING_TABLE_ENTITY = BLOCK_ENTITIES.register(
             "ultimate_enchanting_table", () -> BlockEntityType.Builder.of(UltimateEnchantingTableBlockEntity::new, ENCHANTING_TABLE.get()).build(null));
     public static final RegistryObject<MenuType<UltimateEnchantingMenu>> ENCHANTING_MENU = MENUS.register("ultimate_enchanting",
@@ -67,6 +85,7 @@ public class UltimateEnchanting {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.register(new VitalityHandler());
+        MinecraftForge.EVENT_BUS.register(new MatadiosesHandler());
     }
 
     private void registerCommands(RegisterCommandsEvent event) {
