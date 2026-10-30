@@ -1,5 +1,6 @@
 package com.example.ultimateenchanting.item;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -16,6 +17,16 @@ public class MatadiosesSwordItem extends SwordItem {
         // base damage values are 7, 10, 13, 16 and 20 before enchantments.
         super(Tiers.DIAMOND, damage - 4, -2.4F, properties);
         this.loreKey = loreKey;
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        // The inscription remains unreadable until the Ancient Word Lens
+        // replaces the stack's hover name with its translated true name.
+        if (!stack.hasCustomHoverName()) {
+            return Component.translatable(this.getDescriptionId(stack)).withStyle(ChatFormatting.OBFUSCATED);
+        }
+        return super.getName(stack);
     }
 
     @Override
