@@ -15,7 +15,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.common.ForgeHooks;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -27,6 +26,8 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
     private static final int LEVELS_PER_ENCHANTMENT = 11;
     private final Container container;
     private final ContainerLevelAccess access;
+    private ItemStack cachedInput = ItemStack.EMPTY;
+    private List<Enchantment> cachedAvailableEnchantments = List.of();
 
     public UltimateEnchantingMenu(int id, Inventory inventory, FriendlyByteBuf data) {
         this(id, inventory, new SimpleContainer(2), ContainerLevelAccess.NULL);
@@ -50,7 +51,16 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
 
     public List<Enchantment> getAvailableEnchantments() {
         ItemStack stack = container.getItem(0);
-        if (stack.isEmpty()) return List.of();
+        if (ItemStack.matches(cachedInput, stack)) {
+            return cachedAvailableEnchantments;
+        }
+
+        cachedInput = stack.copy();
+        if (stack.isEmpty()) {
+            cachedAvailableEnchantments = List.of();
+            return cachedAvailableEnchantments;
+        }
+
         boolean book = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
         List<Enchantment> list = new ArrayList<>();
         Map<Enchantment, Integer> currentEnchantments = EnchantmentHelper.getEnchantments(stack);
@@ -60,7 +70,8 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             if (book || enchantment.canEnchant(stack) || currentEnchantments.containsKey(enchantment)) list.add(enchantment);
         });
         list.sort(Comparator.comparing(e -> BuiltInRegistries.ENCHANTMENT.getKey(e).toString()));
-        return list;
+        cachedAvailableEnchantments = List.copyOf(list);
+        return cachedAvailableEnchantments;
     }
 
     private int maximumFor(Enchantment enchantment) {
