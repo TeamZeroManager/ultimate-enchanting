@@ -18,7 +18,11 @@ public class VitalityHandler {
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase != TickEvent.Phase.END || event.player.level().isClientSide) return;
+
         Player player = event.player;
+        // Armor enchantments are checked twice per second instead of on every game tick.
+        if (player.tickCount % 10 != 0) return;
+
         AttributeInstance maxHealth = player.getAttribute(Attributes.MAX_HEALTH);
         if (maxHealth == null) return;
 
