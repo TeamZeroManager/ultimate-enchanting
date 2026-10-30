@@ -14,14 +14,14 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.List;
 import java.util.Set;
 
 public class RelicLootHandler {
     private static final String LENS_DISCOVERED_TAG = "ultimate_enchanting_inscriptions_deciphered";
+    private static final ResourceLocation ANCIENT_CITY_CHEST = new ResourceLocation("minecraft", "chests/ancient_city");
 
     private static final Set<ResourceLocation> LENS_CHESTS = Set.of(
-            new ResourceLocation("minecraft", "chests/ancient_city"),
+            ANCIENT_CITY_CHEST,
             new ResourceLocation("minecraft", "chests/stronghold_library"),
             new ResourceLocation("minecraft", "chests/woodland_mansion"),
             new ResourceLocation("minecraft", "chests/jungle_temple"),
@@ -29,7 +29,7 @@ public class RelicLootHandler {
     );
 
     private static final Set<ResourceLocation> TABLE_CHESTS = Set.of(
-            new ResourceLocation("minecraft", "chests/ancient_city"),
+            ANCIENT_CITY_CHEST,
             new ResourceLocation("minecraft", "chests/woodland_mansion"),
             new ResourceLocation("minecraft", "chests/end_city_treasure"),
             new ResourceLocation("minecraft", "chests/bastion_treasure"),
@@ -40,7 +40,7 @@ public class RelicLootHandler {
     public void onLootTableLoad(LootTableLoadEvent event) {
         ResourceLocation chest = event.getName();
 
-        if (chest.equals(new ResourceLocation("minecraft", "chests/ancient_city"))) {
+        if (ANCIENT_CITY_CHEST.equals(chest)) {
             // A 2% chance per Ancient City chest to contain exactly one random Matadioses variant.
             event.getTable().addPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
@@ -76,17 +76,20 @@ public class RelicLootHandler {
             return;
         }
 
-        boolean alreadyDiscovered = player.getPersistentData().getBoolean(LENS_DISCOVERED_TAG);
-        boolean hasLens = player.getInventory().items.stream()
-                .anyMatch(stack -> stack.is(UltimateEnchanting.VERBO_LENS.get()));
-
-        if (!alreadyDiscovered && hasLens) {
-            player.getPersistentData().putBoolean(LENS_DISCOVERED_TAG, true);
-            alreadyDiscovered = true;
+        // Inventory discovery and name updates do not need to run 20 times per second.
+        if (player.tickCount % 20 != 0) {
+            return;
         }
 
+        boolean alreadyDiscovered = player.getPersistentData().getBoolean(LENS_DISCOVERED_TAG);
         if (!alreadyDiscovered) {
-            return;
+            boolean hasLens = player.getInventory().items.stream()
+                    .anyMatch(stack -> stack.is(UltimateEnchanting.VERBO_LENS.get()));
+            if (!hasLens) {
+                return;
+            }
+
+            player.getPersistentData().putBoolean(LENS_DISCOVERED_TAG, true);
         }
 
         for (ItemStack stack : player.getInventory().items) {
