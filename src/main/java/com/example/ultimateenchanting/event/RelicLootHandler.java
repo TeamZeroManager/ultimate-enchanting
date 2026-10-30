@@ -40,6 +40,19 @@ public class RelicLootHandler {
     public void onLootTableLoad(LootTableLoadEvent event) {
         ResourceLocation chest = event.getName();
 
+        if (chest.equals(new ResourceLocation("minecraft", "chests/ancient_city"))) {
+            // A 2% chance per Ancient City chest to contain exactly one random Matadioses variant.
+            event.getTable().addPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0F))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_7.get()).setWeight(1))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_10.get()).setWeight(1))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_13.get()).setWeight(1))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_16.get()).setWeight(1))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_20.get()).setWeight(1))
+                    .when(LootItemRandomChanceCondition.randomChance(0.02F))
+                    .build());
+        }
+
         if (LENS_CHESTS.contains(chest)) {
             event.getTable().addPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
