@@ -6,6 +6,7 @@ import com.example.ultimateenchanting.enchantment.VitalityEnchantment;
 import com.example.ultimateenchanting.event.VitalityHandler;
 import com.example.ultimateenchanting.event.MatadiosesHandler;
 import com.example.ultimateenchanting.item.MatadiosesSwordItem;
+import com.example.ultimateenchanting.event.RelicLootHandler;
 import com.example.ultimateenchanting.menu.UltimateEnchantingMenu;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.Commands;
@@ -54,6 +55,9 @@ public class UltimateEnchanting {
     public static final RegistryObject<Item> ENCHANTING_TABLE_ITEM = ITEMS.register("ultimate_enchanting_table",
             () -> new BlockItem(ENCHANTING_TABLE.get(), new Item.Properties()));
 
+    public static final RegistryObject<Item> VERBO_LENS = ITEMS.register("lente_verbo_antiguo",
+            () -> new Item(new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> MATADIOSES_7 = ITEMS.register("matadioses_7",
             () -> new MatadiosesSwordItem(7, "item.ultimate_enchanting.matadioses_7.lore", new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> MATADIOSES_10 = ITEMS.register("matadioses_10",
@@ -85,6 +89,7 @@ public class UltimateEnchanting {
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.register(new VitalityHandler());
         MinecraftForge.EVENT_BUS.register(new MatadiosesHandler());
+        MinecraftForge.EVENT_BUS.register(new RelicLootHandler());
     }
 
     private void registerCommands(RegisterCommandsEvent event) {
