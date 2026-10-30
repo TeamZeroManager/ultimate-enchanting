@@ -1,0 +1,85 @@
+package com.example.ultimateenchanting.event;
+
+import com.example.ultimateenchanting.UltimateEnchanting;
+import com.example.ultimateenchanting.item.MatadiosesSwordItem;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.List;
+import java.util.Set;
+
+public class RelicLootHandler {
+    private static final String LENS_DISCOVERED_TAG = "ultimate_enchanting_inscriptions_deciphered";
+
+    private static final Set<ResourceLocation> LENS_CHESTS = Set.of(
+            new ResourceLocation("minecraft", "chests/ancient_city"),
+            new ResourceLocation("minecraft", "chests/stronghold_library"),
+            new ResourceLocation("minecraft", "chests/woodland_mansion"),
+            new ResourceLocation("minecraft", "chests/jungle_temple"),
+            new ResourceLocation("minecraft", "chests/desert_pyramid")
+    );
+
+    private static final Set<ResourceLocation> TABLE_CHESTS = Set.of(
+            new ResourceLocation("minecraft", "chests/ancient_city"),
+            new ResourceLocation("minecraft", "chests/woodland_mansion"),
+            new ResourceLocation("minecraft", "chests/end_city_treasure"),
+            new ResourceLocation("minecraft", "chests/bastion_treasure"),
+            new ResourceLocation("minecraft", "chests/stronghold_library")
+    );
+
+    @SubscribeEvent
+    public void onLootTableLoad(LootTableLoadEvent event) {
+        ResourceLocation chest = event.getName();
+
+        if (LENS_CHESTS.contains(chest)) {
+            event.getTable().addPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0F))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.VERBO_LENS.get()))
+                    .when(LootItemRandomChanceCondition.randomChance(0.06F))
+                    .build());
+        }
+
+        if (TABLE_CHESTS.contains(chest)) {
+            event.getTable().addPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0F))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.ENCHANTING_TABLE_ITEM.get()))
+                    .when(LootItemRandomChanceCondition.randomChance(0.035F))
+                    .build());
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.END || !(event.player instanceof ServerPlayer player)) {
+            return;
+        }
+
+        boolean alreadyDiscovered = player.getPersistentData().getBoolean(LENS_DISCOVERED_TAG);
+        boolean hasLens = player.getInventory().items.stream()
+                .anyMatch(stack -> stack.is(UltimateEnchanting.VERBO_LENS.get()));
+
+        if (!alreadyDiscovered && hasLens) {
+            player.getPersistentData().putBoolean(LENS_DISCOVERED_TAG, true);
+            alreadyDiscovered = true;
+        }
+
+        if (!alreadyDiscovered) {
+            return;
+        }
+
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.getItem() instanceof MatadiosesSwordItem && !stack.hasCustomHoverName()) {
+                stack.setHoverName(Component.translatable(stack.getItem().getDescriptionId()));
+            }
+        }
+    }
+}
