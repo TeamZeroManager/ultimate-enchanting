@@ -11,5 +11,7 @@
   "item.ultimate_enchanting.matadioses_10.lore": "Dos runas guardan un juramento antiguo. La segunda inscripción parece responder a la primera.",
   "item.ultimate_enchanting.matadioses_13.lore": "Tres runas fueron grabadas tras una batalla borrada de la historia. Una de ellas está marcada como si hubiera sido arrancada del metal.",
   "item.ultimate_enchanting.matadioses_16.lore": "Cuatro runas sobrevivieron a siglos de guerras. Ningún portador comprendió que la inscripción estaba incompleta.",
-  "item.ultimate_enchanting.matadioses_20.lore": "Cinco runas casi completan el nombre verdadero. Falta algo que no puede encontrarse en ninguna hoja: aquello que las une."
+  "item.ultimate_enchanting.matadioses_20.lore": "Cinco runas casi completan el nombre verdadero. Falta algo que no puede encontrarse en ninguna hoja: aquello que las une.",
+  "item.ultimate_enchanting.lente_verbo_antiguo": "Lente del Verbo Antiguo",
+  "item.ultimate_enchanting.lente_verbo_antiguo.desc": "Una reliquia capaz de revelar las inscripciones que el tiempo y la historia intentaron borrar."
 }
