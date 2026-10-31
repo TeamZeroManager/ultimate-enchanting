@@ -44,7 +44,7 @@ public class RelicLootHandler {
             // The first Matadioses (10 damage) is the introductory discovery: 10% per chest.
             event.getTable().addPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
-                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_10.get()))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_7.get()))
                     .when(LootItemRandomChanceCondition.randomChance(0.10F))
                     .build());
 
@@ -54,7 +54,7 @@ public class RelicLootHandler {
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_13.get()).setWeight(1))
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_16.get()).setWeight(1))
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_20.get()).setWeight(1))
-                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_7.get()).setWeight(1))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_10.get()).setWeight(1))
                     .when(LootItemRandomChanceCondition.randomChance(0.016F))
                     .build());
         }
