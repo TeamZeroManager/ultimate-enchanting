@@ -41,15 +41,21 @@ public class RelicLootHandler {
         ResourceLocation chest = event.getName();
 
         if (ANCIENT_CITY_CHEST.equals(chest)) {
-            // A 2% chance per Ancient City chest to contain exactly one random Matadioses variant.
+            // The first Matadioses (10 damage) is the introductory discovery: 10% per chest.
             event.getTable().addPool(LootPool.lootPool()
                     .setRolls(ConstantValue.exactly(1.0F))
-                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_7.get()).setWeight(1))
-                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_10.get()).setWeight(1))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_10.get()))
+                    .when(LootItemRandomChanceCondition.randomChance(0.10F))
+                    .build());
+
+            // The four stronger variants remain exceptionally rare: 0.4% each per chest.
+            event.getTable().addPool(LootPool.lootPool()
+                    .setRolls(ConstantValue.exactly(1.0F))
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_13.get()).setWeight(1))
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_16.get()).setWeight(1))
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_20.get()).setWeight(1))
-                    .when(LootItemRandomChanceCondition.randomChance(0.02F))
+                    .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_7.get()).setWeight(1))
+                    .when(LootItemRandomChanceCondition.randomChance(0.016F))
                     .build());
         }
 
