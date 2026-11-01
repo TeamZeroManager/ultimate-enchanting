@@ -20,14 +20,6 @@ public class RelicLootHandler {
     private static final String LENS_DISCOVERED_TAG = "ultimate_enchanting_inscriptions_deciphered";
     private static final ResourceLocation ANCIENT_CITY_CHEST = new ResourceLocation("minecraft", "chests/ancient_city");
 
-    private static final Set<ResourceLocation> LENS_CHESTS = Set.of(
-            ANCIENT_CITY_CHEST,
-            new ResourceLocation("minecraft", "chests/stronghold_library"),
-            new ResourceLocation("minecraft", "chests/woodland_mansion"),
-            new ResourceLocation("minecraft", "chests/jungle_temple"),
-            new ResourceLocation("minecraft", "chests/desert_pyramid")
-    );
-
     private static final Set<ResourceLocation> TABLE_CHESTS = Set.of(
             ANCIENT_CITY_CHEST,
             new ResourceLocation("minecraft", "chests/woodland_mansion"),
@@ -56,14 +48,6 @@ public class RelicLootHandler {
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_20.get()).setWeight(1))
                     .add(LootItem.lootTableItem(UltimateEnchanting.MATADIOSES_10.get()).setWeight(1))
                     .when(LootItemRandomChanceCondition.randomChance(0.016F))
-                    .build());
-        }
-
-        if (LENS_CHESTS.contains(chest)) {
-            event.getTable().addPool(LootPool.lootPool()
-                    .setRolls(ConstantValue.exactly(1.0F))
-                    .add(LootItem.lootTableItem(UltimateEnchanting.VERBO_LENS.get()))
-                    .when(LootItemRandomChanceCondition.randomChance(0.06F))
                     .build());
         }
 
