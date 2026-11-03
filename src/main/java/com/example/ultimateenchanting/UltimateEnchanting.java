@@ -11,7 +11,7 @@ import com.example.ultimateenchanting.event.MatadiosesHandler;
 import com.example.ultimateenchanting.item.MatadiosesSwordItem;
 import com.example.ultimateenchanting.item.AncientWordLensItem;
 import com.example.ultimateenchanting.event.RelicLootHandler;
-import com.example.ultimateenchanting.event.KnowledgeHandler;
+import com.example.ultimateenchanting.event.KnowledgeHandler;\nimport com.example.ultimateenchanting.event.SuperiorEnchantmentHandler;
 import com.example.ultimateenchanting.menu.UltimateEnchantingMenu;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.Commands;
@@ -96,7 +96,7 @@ public class UltimateEnchanting {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.register(new VitalityHandler());
-        MinecraftForge.EVENT_BUS.register(new KnowledgeHandler());
+        MinecraftForge.EVENT_BUS.register(new KnowledgeHandler());\n        MinecraftForge.EVENT_BUS.register(new SuperiorEnchantmentHandler());
         MinecraftForge.EVENT_BUS.register(new MatadiosesHandler());
         MinecraftForge.EVENT_BUS.register(new RelicLootHandler());
     }
