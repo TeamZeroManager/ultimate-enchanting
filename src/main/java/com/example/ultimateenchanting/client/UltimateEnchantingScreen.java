@@ -169,8 +169,8 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             int knobX = leftPos + SLIDER_X + 1 + fillWidth;
             graphics.fill(knobX - 2, sliderY - 2, knobX + 2, sliderY + 6, 0xFFD8C7A5);
 
-            int xpCost = menu.getXpCost(enchantment, Math.max(1, selected));
-            int lapisCost = Math.max(1, (selected + 1) / 2);
+            int xpCost = selected == 0 ? 0 : menu.getXpCost(enchantment, selected);
+            int lapisCost = selected == 0 ? 0 : Math.max(1, (selected + 1) / 2);
             boolean removing = selected == 0 && current > 0;
             boolean redundant = selected > 0 && selected <= current;
             boolean hasXp = minecraft.player != null && minecraft.player.experienceLevel >= xpCost;
