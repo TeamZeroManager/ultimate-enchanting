@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class KnowledgeHandler {
     // Large fixed reward per kill; the enchantment is intentionally rare and costly.
-    private static final int BONUS_LEVELS_PER_KILL = 3;
+    private static final int BONUS_LEVELS_PER_KILL = 5;
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
