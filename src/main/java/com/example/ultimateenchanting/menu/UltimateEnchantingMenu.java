@@ -77,7 +77,18 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
     private int maximumFor(Enchantment enchantment) {
         int configuredLimit = Math.min(10, UltimateEnchanting.LEVEL_LIMIT.get());
         if (enchantment == UltimateEnchanting.VITALITY.get()) return 5;
+        if (enchantment == UltimateEnchanting.PROTECTION.get()
+                || enchantment == UltimateEnchanting.DAMAGE.get()
+                || enchantment == UltimateEnchanting.KNOWLEDGE.get()) return 1;
         return configuredLimit;
+    }
+
+    public int getXpCost(Enchantment enchantment, int level) {
+        if (enchantment == UltimateEnchanting.PROTECTION.get()
+                || enchantment == UltimateEnchanting.DAMAGE.get()) return 50;
+        if (enchantment == UltimateEnchanting.KNOWLEDGE.get()) return 100;
+        if (enchantment == UltimateEnchanting.VITALITY.get()) return Math.max(1, level * 5);
+        return Math.max(1, level);
     }
 
     @Override
@@ -119,7 +130,15 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             return false;
         }
 
-        int xpCost = Math.max(1, requestedLevel);
+        for (Map.Entry<Enchantment, Integer> entry : currentEnchantments.entrySet()) {
+            Enchantment existing = entry.getKey();
+            if (existing != enchantment && !enchantment.isCompatibleWith(existing)) {
+                player.displayClientMessage(Component.literal("Este encantamiento es incompatible con " + existing.getFullname(entry.getValue()).getString() + "."), true);
+                return false;
+            }
+        }
+
+        int xpCost = getXpCost(enchantment, requestedLevel);
         int lapisCost = Math.max(1, (requestedLevel + 1) / 2);
         if (player.experienceLevel < xpCost) {
             player.displayClientMessage(Component.literal("Necesitas " + xpCost + " niveles de experiencia."), true);
@@ -130,8 +149,7 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
             return false;
         }
 
-        // Ultimate Enchanting intentionally allows incompatible enchantments to coexist.
-        // Preserve all existing enchantments and add/upgrade only the selected one.
+        // Preserve compatible existing enchantments and add/upgrade only the selected one.
         currentEnchantments.put(enchantment, requestedLevel);
         if (target.is(Items.BOOK)) {
             target = new ItemStack(Items.ENCHANTED_BOOK);
