@@ -11,6 +11,6 @@ public class VitalityEnchantment extends Enchantment {
     }
 
     @Override public int getMaxLevel() { return 5; }
-    @Override public int getMinCost(int level) { return 10 + (level - 1) * 10; }
-    @Override public int getMaxCost(int level) { return getMinCost(level) + 15; }
+    @Override public int getMinCost(int level) { return 30 + (level - 1) * 20; }
+    @Override public int getMaxCost(int level) { return getMinCost(level) + 25; }
 }
