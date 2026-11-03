@@ -1,0 +1,15 @@
+{
+  "name": "ultimate_enchanting:santuario/start",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "ultimate_enchanting:santuario/entrada",
+        "processors": "minecraft:empty",
+        "projection": "rigid"
+      }
+    }
+  ]
+}
