@@ -3,11 +3,15 @@ package com.example.ultimateenchanting;
 import com.example.ultimateenchanting.block.UltimateEnchantingTableBlock;
 import com.example.ultimateenchanting.blockentity.UltimateEnchantingTableBlockEntity;
 import com.example.ultimateenchanting.enchantment.VitalityEnchantment;
+import com.example.ultimateenchanting.enchantment.ProtectionEnchantment;
+import com.example.ultimateenchanting.enchantment.DamageEnchantment;
+import com.example.ultimateenchanting.enchantment.KnowledgeEnchantment;
 import com.example.ultimateenchanting.event.VitalityHandler;
 import com.example.ultimateenchanting.event.MatadiosesHandler;
 import com.example.ultimateenchanting.item.MatadiosesSwordItem;
 import com.example.ultimateenchanting.item.AncientWordLensItem;
 import com.example.ultimateenchanting.event.RelicLootHandler;
+import com.example.ultimateenchanting.event.KnowledgeHandler;
 import com.example.ultimateenchanting.menu.UltimateEnchantingMenu;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import net.minecraft.commands.Commands;
@@ -77,6 +81,9 @@ public class UltimateEnchanting {
     public static final RegistryObject<MenuType<UltimateEnchantingMenu>> ENCHANTING_MENU = MENUS.register("ultimate_enchanting",
             () -> IForgeMenuType.create(UltimateEnchantingMenu::new));
     public static final RegistryObject<Enchantment> VITALITY = ENCHANTMENTS.register("vitality", VitalityEnchantment::new);
+    public static final RegistryObject<Enchantment> PROTECTION = ENCHANTMENTS.register("protection", ProtectionEnchantment::new);
+    public static final RegistryObject<Enchantment> DAMAGE = ENCHANTMENTS.register("damage", DamageEnchantment::new);
+    public static final RegistryObject<Enchantment> KNOWLEDGE = ENCHANTMENTS.register("knowledge", KnowledgeEnchantment::new);
 
     public UltimateEnchanting() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -89,6 +96,7 @@ public class UltimateEnchanting {
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER_CONFIG);
         MinecraftForge.EVENT_BUS.addListener(this::registerCommands);
         MinecraftForge.EVENT_BUS.register(new VitalityHandler());
+        MinecraftForge.EVENT_BUS.register(new KnowledgeHandler());
         MinecraftForge.EVENT_BUS.register(new MatadiosesHandler());
         MinecraftForge.EVENT_BUS.register(new RelicLootHandler());
     }
