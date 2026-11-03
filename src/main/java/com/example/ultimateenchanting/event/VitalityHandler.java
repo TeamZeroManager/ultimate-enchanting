@@ -34,7 +34,7 @@ public class VitalityHandler {
             highestLevel = Math.max(highestLevel, level);
         }
 
-        double desiredBonus = highestLevel * 2.0;
+        // Each level grants four health points (two full hearts); level V grants ten hearts.\n        double desiredBonus = highestLevel * 4.0;
         AttributeModifier current = maxHealth.getModifier(VITALITY_MODIFIER_ID);
         if (desiredBonus <= 0.0) {
             if (current != null) maxHealth.removeModifier(VITALITY_MODIFIER_ID);
