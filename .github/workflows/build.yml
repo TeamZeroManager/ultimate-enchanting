@@ -3,7 +3,7 @@ name: Build Ultimate Enchanting
 on:
   workflow_dispatch:
   push:
-    branches: [ main, master, 'feature/ultimate-enchanting-2.0' ]
+    branches: [ main, master, 'feature/ultimate-enchanting-2.0', 'feature/ultimate-enchanting-enhancements' ]
 
 permissions:
   contents: read
