@@ -14,7 +14,7 @@
   "item.ultimate_enchanting.matadioses_20.lore": "Five runes almost complete the true name. Something no blade can hold is still missing: what unites them.",
   "item.ultimate_enchanting.lente_verbo_antiguo": "Lens of the Ancient Word",
   "item.ultimate_enchanting.lente_verbo_antiguo.desc": "A relic capable of revealing inscriptions that time and history tried to erase.",
-  "enchantment.ultimate_enchanting.protection": "Absolute Protection",
-  "enchantment.ultimate_enchanting.damage": "Absolute Damage",
-  "enchantment.ultimate_enchanting.knowledge": "Absolute Knowledge"
+  "enchantment.ultimate_enchanting.protection": "Protection",
+  "enchantment.ultimate_enchanting.damage": "Damage",
+  "enchantment.ultimate_enchanting.knowledge": "Knowledge"
 }
