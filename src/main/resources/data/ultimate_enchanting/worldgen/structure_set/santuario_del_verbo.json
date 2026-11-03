@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "ultimate_enchanting:santuario_del_verbo",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 40,
+    "separation": 32,
+    "salt": 19084511
+  }
+}
