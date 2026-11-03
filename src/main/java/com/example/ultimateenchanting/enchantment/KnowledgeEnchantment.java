@@ -2,7 +2,9 @@ package com.example.ultimateenchanting.enchantment;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;\nimport net.minecraft.world.item.ItemStack;\nimport net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
 
 public class KnowledgeEnchantment extends Enchantment {
     public KnowledgeEnchantment() {
@@ -10,7 +12,9 @@ public class KnowledgeEnchantment extends Enchantment {
                 new EquipmentSlot[]{EquipmentSlot.MAINHAND});
     }
 
-    @Override public boolean canEnchant(ItemStack stack) { return stack.getItem() instanceof SwordItem; }\n\n    @Override public int getMaxLevel() { return 1; }
+    @Override public boolean canEnchant(ItemStack stack) { return stack.getItem() instanceof SwordItem; }
+
+    @Override public int getMaxLevel() { return 1; }
     @Override public int getMinCost(int level) { return 100; }
     @Override public int getMaxCost(int level) { return 150; }
 }
