@@ -41,6 +41,9 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
     private int maxLevel(Enchantment enchantment) {
         int cap = Math.min(10, UltimateEnchanting.LEVEL_LIMIT.get());
         if (enchantment == UltimateEnchanting.VITALITY.get()) return 5;
+        if (enchantment == UltimateEnchanting.PROTECTION.get()
+                || enchantment == UltimateEnchanting.DAMAGE.get()
+                || enchantment == UltimateEnchanting.KNOWLEDGE.get()) return 1;
         return cap;
     }
 
@@ -166,11 +169,12 @@ public class UltimateEnchantingScreen extends AbstractContainerScreen<UltimateEn
             int knobX = leftPos + SLIDER_X + 1 + fillWidth;
             graphics.fill(knobX - 2, sliderY - 2, knobX + 2, sliderY + 6, 0xFFD8C7A5);
 
-            int xpCost = Math.max(1, selected);
+            int xpCost = menu.getXpCost(enchantment, Math.max(1, selected));
             int lapisCost = Math.max(1, (selected + 1) / 2);
             boolean removing = selected == 0 && current > 0;
             boolean redundant = selected > 0 && selected <= current;
-            boolean canPay = !redundant && selected > current && menu.getSlot(1).getItem().getCount() >= lapisCost;
+            boolean hasXp = minecraft.player != null && minecraft.player.experienceLevel >= xpCost;
+            boolean canPay = !redundant && selected > current && hasXp && menu.getSlot(1).getItem().getCount() >= lapisCost;
             int buttonColor = removing ? 0xFF754842 : (redundant ? 0xFF45404B : (canPay ? 0xFF496A69 : 0xFF51414C));
             graphics.fill(leftPos + APPLY_X, y + 5, leftPos + APPLY_X + 39, y + 21, 0xFF151119);
             graphics.fill(leftPos + APPLY_X + 1, y + 6, leftPos + APPLY_X + 38, y + 20, buttonColor);
