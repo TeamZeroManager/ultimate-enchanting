@@ -15,6 +15,6 @@ public class KnowledgeEnchantment extends Enchantment {
     @Override public boolean canEnchant(ItemStack stack) { return stack.getItem() instanceof SwordItem; }
 
     @Override public int getMaxLevel() { return 1; }
-    @Override public int getMinCost(int level) { return 100; }
-    @Override public int getMaxCost(int level) { return 150; }
+    @Override public int getMinCost(int level) { return 80; }
+    @Override public int getMaxCost(int level) { return 120; }
 }
