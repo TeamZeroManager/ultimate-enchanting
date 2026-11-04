@@ -86,7 +86,7 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
     public int getXpCost(Enchantment enchantment, int level) {
         if (enchantment == UltimateEnchanting.PROTECTION.get()
                 || enchantment == UltimateEnchanting.DAMAGE.get()) return 50;
-        if (enchantment == UltimateEnchanting.KNOWLEDGE.get()) return 100;
+        if (enchantment == UltimateEnchanting.KNOWLEDGE.get()) return 80;
         if (enchantment == UltimateEnchanting.VITALITY.get()) return Math.max(1, level * 5);
         return Math.max(1, level);
     }
