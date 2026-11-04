@@ -132,7 +132,8 @@ public class UltimateEnchantingMenu extends AbstractContainerMenu {
 
         for (Map.Entry<Enchantment, Integer> entry : currentEnchantments.entrySet()) {
             Enchantment existing = entry.getKey();
-            if (existing != enchantment && !enchantment.isCompatibleWith(existing)) {
+            if (existing != enchantment
+                    && (!enchantment.isCompatibleWith(existing) || !existing.isCompatibleWith(enchantment))) {
                 player.displayClientMessage(Component.literal("Este encantamiento es incompatible con " + existing.getFullname(entry.getValue()).getString() + "."), true);
                 return false;
             }
