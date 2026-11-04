@@ -21,9 +21,9 @@ public class DamageEnchantment extends Enchantment {
 
     @Override
     protected boolean checkCompatibility(Enchantment other) {
-        return other != Enchantments.DAMAGE_ALL
-                && other != Enchantments.DAMAGE_UNDEAD
-                && other != Enchantments.DAMAGE_ARTHROPODS
+        return other != Enchantments.SHARPNESS
+                && other != Enchantments.SMITE
+                && other != Enchantments.BANE_OF_ARTHROPODS
                 && super.checkCompatibility(other);
     }
 }
